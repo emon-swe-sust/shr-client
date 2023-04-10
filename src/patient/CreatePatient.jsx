@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Form } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Form, Navigate, redirect, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const FormContainer = styled(Form)`
@@ -24,10 +25,20 @@ const Input = styled.input`
   width: 400px;
 `;
 
-const Select = styled.select`
+const DateInput = styled.input`
   margin-top: 0.5rem;
   padding: 0.5rem;
   border: 1px solid #ccc;
+  width: 400px;
+  text-align: center;
+`;
+
+const Select = styled.select`
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  width: 400px;
+  border: 1px solid #ccc;
+  text-align: center;
 `;
 
 const Button = styled.button`
@@ -64,6 +75,13 @@ const CreatePatient = () => {
     },
     confidential: "No",
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("access_token")) {
+      navigate("/signin");
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -84,9 +102,30 @@ const CreatePatient = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    const data = JSON.stringify(formData);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/form-data",
+          "X-Auth-Token": sessionStorage.getItem("access_token"),
+          From: "local-facility-admin@test.com",
+          client_id: "18701",
+        },
+      };
+
+      const response = await axios.post(
+        "http://localhost:8081/api/v1/patients",
+        data,
+        config
+      );
+
+      sessionStorage.setItem("access_token", response.data.access_token);
+      navigate("/");
+    } catch (error) {}
     console.log(formData);
+    console.log(data);
   };
 
   return (
@@ -120,7 +159,7 @@ const CreatePatient = () => {
         required
       />
       <Label htmlFor="date_of_birth">Date of Birth:</Label>
-      <Input
+      <DateInput
         type="date"
         id="date_of_birth"
         name="date_of_birth"

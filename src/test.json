@@ -1,0 +1,14 @@
+{
+  "given_name": "sahin",
+  "sur_name": "mia",
+  "nid": "01111116321725071",
+  "date_of_birth": "2022-03-18",
+  "gender": "M",
+  "present_address": {
+    "address_line": "Street 1, Baridhara village",
+    "division_id": "30",
+    "district_id": "26",
+    "upazila_id": "02"
+  },
+  "confidential": "No"
+}

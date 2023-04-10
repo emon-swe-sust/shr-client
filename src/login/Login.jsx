@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { Navigate, redirect, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -46,8 +47,15 @@ const Title = styled.div`
 `;
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    if (sessionStorage.getItem("access_token")) {
+      navigate("/");
+    }
+  }, []);
 
   const handleemailChange = (event) => {
     setEmail(event.target.value);
@@ -60,8 +68,6 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (email && password) {
-      console.log("email:", email);
-      console.log("Password:", password);
       try {
         const config = {
           headers: {
@@ -81,11 +87,9 @@ function Login() {
           config
         );
 
-        console.log("Login successful");
-        console.log(response);
-      } catch (error) {
-        console.error("Error logging in:", error);
-      }
+        sessionStorage.setItem("access_token", response.data.access_token);
+        navigate("/");
+      } catch (error) {}
     } else {
       alert("Please fill in both email and password fields");
     }
