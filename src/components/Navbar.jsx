@@ -52,7 +52,7 @@ function Navbar() {
     <Nav>
       <LeftPart>
         <Button version={"primary"} onClick={() => navigate("/")}>
-          Courses
+          Create Patient
         </Button>
       </LeftPart>
       <MiddlePart>

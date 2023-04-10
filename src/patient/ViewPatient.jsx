@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Table from "../components/Table";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Button from "../components/Button";
 
 function ViewPatient() {
   const params = useParams();
+  const navigate = useNavigate();
   const hid = params.hid;
   const [details, setDetails] = useState();
 
@@ -91,6 +93,12 @@ function ViewPatient() {
         tableTitle={`Patient Details - ${
           details?.given_name ? details.given_name : ""
         }`}
+        titleButtons={[
+          <Button onClick={() => navigate(`/create-encounter/${hid}`)}>
+            Make Visit
+          </Button>,
+          <Button version={"secondary"}>See Encounters</Button>,
+        ]}
       />
     </div>
   );

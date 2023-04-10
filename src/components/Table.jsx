@@ -31,6 +31,11 @@ const StyledTD = styled.div`
   padding: 5px;
 `;
 
+const TableTitle = styled(StyledTD)`
+  display: flex;
+  width: 100%;
+`;
+
 const StyledTR = styled.div`
   margin-top: 16px;
   width: 100%;
@@ -40,17 +45,27 @@ const StyledTR = styled.div`
   display: flex;
 `;
 
-const TableTitle = styled(StyledTD)`
-  margin: auto;
+const TitleButtons = styled.div`
+  margin-left: auto;
+  margin-right: 24px;
+  display: flex;
+  gap: 24px;
 `;
 
 function Table(props) {
-  const { column, data, area, tableTitle } = props;
+  const { column, data, area, tableTitle, titleButtons } = props;
   return (
     <TableContainer>
       <StyledTable>
         <StyledThead>
-          {tableTitle && <TableTitle>{tableTitle}</TableTitle>}
+          {tableTitle && (
+            <TableTitle>
+              {tableTitle}
+              <TitleButtons>
+                {titleButtons && titleButtons.map((button) => button)}
+              </TitleButtons>
+            </TableTitle>
+          )}
           {!tableTitle &&
             column.map((col, idx) => {
               return (
