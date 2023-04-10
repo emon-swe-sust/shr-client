@@ -11,13 +11,18 @@ function ViewEncounter() {
   const hid = params.hid;
   const [encounters, setEncounters] = useState();
 
+  useEffect(() => {
+    if (!sessionStorage.getItem("access_token")) {
+      navigate("/signin");
+    }
+  }, []);
+
   const columns = ["key", "value"];
 
   const columnArea = {
     key: "40%",
     value: "60%",
   };
-  //   98000104888
   const fetchPatientDetails = async () => {
     try {
       const config = {

@@ -48,6 +48,11 @@ function Navbar() {
     setHID(event.target.value);
   };
 
+  const onLogout = () => {
+    sessionStorage.removeItem("access_token");
+    navigate("/signin");
+  };
+
   return (
     <Nav>
       <LeftPart>
@@ -67,10 +72,7 @@ function Navbar() {
         </Button>
       </MiddlePart>
       <RightPart>
-        <Button
-          onClick={() => sessionStorage.removeItem("access_token")}
-          version={"danger"}
-        >
+        <Button onClick={onLogout} version={"danger"}>
           Logout
         </Button>
       </RightPart>

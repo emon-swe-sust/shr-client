@@ -39,7 +39,12 @@ function ViewPatient() {
 
   useEffect(() => {
     fetchPatientDetails();
+    if (!sessionStorage.getItem("access_token")) {
+      navigate("/signin");
+    }
   }, [hid]);
+
+  useEffect(() => {}, []);
 
   const data = [
     {
