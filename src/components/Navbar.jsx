@@ -67,7 +67,12 @@ function Navbar() {
         </Button>
       </MiddlePart>
       <RightPart>
-        <Button version={"danger"}>Logout</Button>
+        <Button
+          onClick={() => sessionStorage.removeItem("access_token")}
+          version={"danger"}
+        >
+          Logout
+        </Button>
       </RightPart>
     </Nav>
   );

@@ -123,8 +123,6 @@ const CreatePatient = () => {
       );
       alert(`Patient created with hid ${response.data.id}`);
     } catch (error) {}
-    console.log(formData);
-    console.log(data);
   };
 
   return (

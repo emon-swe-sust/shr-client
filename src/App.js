@@ -3,6 +3,7 @@ import Login from "./login/Login";
 import CreatePatient from "./patient/CreatePatient";
 import ViewPatient from "./patient/ViewPatient";
 import CreateEncounter from "./encounter/CreateEncounter";
+import ViewEncounter from "./encounter/ViewEncounter";
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,10 @@ function App() {
     {
       path: "/create-encounter/:hid",
       element: <CreateEncounter />,
+    },
+    {
+      path: "/view-encounters/:hid",
+      element: <ViewEncounter />,
     },
   ]);
 

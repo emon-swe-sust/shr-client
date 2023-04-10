@@ -19,7 +19,6 @@ function ViewPatient() {
   };
 
   const fetchPatientDetails = async () => {
-    console.log("first");
     try {
       const config = {
         headers: {
@@ -82,7 +81,6 @@ function ViewPatient() {
     },
   ];
 
-  console.log(details?.present_address?.address_line);
   return (
     <div>
       <Navbar />
@@ -97,7 +95,12 @@ function ViewPatient() {
           <Button onClick={() => navigate(`/create-encounter/${hid}`)}>
             Make Visit
           </Button>,
-          <Button version={"secondary"}>See Encounters</Button>,
+          <Button
+            onClick={() => navigate(`/view-encounters/${hid}`)}
+            version={"secondary"}
+          >
+            See Encounters
+          </Button>,
         ]}
       />
     </div>

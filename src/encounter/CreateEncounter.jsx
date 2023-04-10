@@ -86,7 +86,6 @@ const CreateEncounter = () => {
     const content = {
       content: data,
     };
-    console.log("content", content);
     try {
       const config = {
         headers: {
@@ -102,7 +101,7 @@ const CreateEncounter = () => {
         content,
         config
       );
-      console.log(response);
+      alert(`Encounter created with id ${response.data.encounterId}`);
     } catch (error) {}
   };
 
