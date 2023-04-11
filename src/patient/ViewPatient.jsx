@@ -29,59 +29,55 @@ function ViewPatient() {
         },
       };
 
-      const response = await axios.get(
-        `http://localhost/api/v1/patients/${hid}`,
-        config
-      );
+      const response = await axios.get(`/api/v1/patients/${hid}`, config);
       setDetails(response.data);
+      sessionStorage.setItem("patientName", response.data.given_name);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchPatientDetails();
     if (!sessionStorage.getItem("access_token")) {
       navigate("/signin");
     }
+    fetchPatientDetails();
   }, [hid]);
-
-  useEffect(() => {}, []);
 
   const data = [
     {
-      key: "Given Name",
+      key: "নাম",
       value: details?.given_name || "",
     },
     {
-      key: "Sur Name",
+      key: "পদবি",
       value: details?.sur_name || "",
     },
     {
-      key: "NID",
+      key: "জাতীয় পরিচয়পত্র নম্বর",
       value: details?.nid || "",
     },
     {
-      key: "HID",
+      key: "হেলথ আইডি ",
       value: details?.hid || "",
     },
     {
-      key: "Gender",
+      key: "লিঙ্গ",
       value:
         details?.gender === "F"
-          ? "Female"
+          ? "মহিলা"
           : details?.gender === "M"
-          ? "Male"
-          : "",
+          ? "পুরুষ"
+          : "অন্যান্য",
     },
     {
-      key: "Date of Birth",
+      key: "জন্ম তারিখ",
       value: details?.date_of_birth ? details?.date_of_birth.slice(0, 10) : "",
     },
     {
-      key: "Address",
+      key: "ঠিকানা",
       value: details?.present_address?.address_line || "",
     },
     {
-      key: "Confidentiality",
+      key: "গোপনীয়তা",
       value: details?.confidential || "",
     },
   ];
@@ -93,18 +89,18 @@ function ViewPatient() {
         column={columns}
         data={data}
         area={columnArea}
-        tableTitle={`Patient Details - ${
+        tableTitle={`রোগীর বিবরণ | ${
           details?.given_name ? details.given_name : ""
         }`}
         titleButtons={[
           <Button onClick={() => navigate(`/create-encounter/${hid}`)}>
-            Make Visit
+            ভিজিটের তথ্য দিন
           </Button>,
           <Button
             onClick={() => navigate(`/view-encounters/${hid}`)}
             version={"secondary"}
           >
-            See Encounters
+            ভিজিটের তথ্য দেখুন
           </Button>,
         ]}
       />

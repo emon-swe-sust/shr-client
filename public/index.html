@@ -40,4 +40,17 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    let uhc_name = location.hostname.substring(
+      0,
+      location.hostname.indexOf(".")
+    );
+
+    let isSavar = uhc_name.toLowerCase() == "savar";
+    let uhc_display = isSavar ? "সাভার" : "সাটুরিয়া";
+    document.getElementsByTagName("body")[0].style.backgroundColor = isSavar
+      ? "#b1e5cd"
+      : "#cbeaf8";
+    document.title = `${uhc_name} Upazilla Health Complex`;
+  </script>
 </html>

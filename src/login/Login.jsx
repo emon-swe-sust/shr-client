@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { Navigate, redirect, useNavigate, useParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +20,7 @@ const Form = styled.form`
   padding: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   border: none;
+  background-color: white;
   border-radius: 10px;
 `;
 
@@ -50,6 +51,7 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const params = useParams();
 
   useEffect(() => {
     if (sessionStorage.getItem("access_token")) {
@@ -81,11 +83,7 @@ function Login() {
         formData.append("email", email);
         formData.append("password", password);
 
-        const response = await axios.post(
-          "http://localhost/signin",
-          formData,
-          config
-        );
+        const response = await axios.post("/signin", formData, config);
 
         sessionStorage.setItem("access_token", response.data.access_token);
         navigate("/");
@@ -96,25 +94,30 @@ function Login() {
   };
 
   return (
-    <Container>
-      <Title>Savar Upazila Health Complex</Title>
-      <Form onSubmit={handleSubmit}>
-        <h1>Login</h1>
-        <Input
-          type="text"
-          placeholder="email"
-          value={email}
-          onChange={handleemailChange}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <Button type="submit">Login</Button>
-      </Form>
-    </Container>
+    <>
+      <Container>
+        <Title>
+          {window.location.href.includes("savar") ? "সাভার" : "সাটুরিয়া"} উপজেলা
+          স্বাস্থ্য কমপ্লেক্স
+        </Title>
+        <Form onSubmit={handleSubmit}>
+          <h1>লগইন</h1>
+          <Input
+            type="text"
+            placeholder="ইমেইল"
+            value={email}
+            onChange={handleemailChange}
+          />
+          <Input
+            type="password"
+            placeholder="পাসওয়ার্ড"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <Button type="submit">লগইন</Button>
+        </Form>
+      </Container>
+    </>
   );
 }
 

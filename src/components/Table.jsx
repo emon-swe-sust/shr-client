@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+// 98000104789
+
 const TableContainer = styled.div`
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   width: 70%;
@@ -8,10 +10,11 @@ const TableContainer = styled.div`
   margin-bottom: 60px;
   border-radius: 10px;
   margin-top: 24px;
+  background-color: white;
 `;
 
 const StyledTable = styled.div`
-  width: 100%;
+  padding: 24px;
 `;
 
 const StyledThead = styled.div`
@@ -28,12 +31,14 @@ const StyledThead = styled.div`
 
 const StyledTD = styled.div`
   width: ${(props) => props.width};
-  padding: 5px;
+  padding: 30px;
 `;
 
 const TableTitle = styled(StyledTD)`
   display: flex;
+  padding: 30px;
   width: 100%;
+  font-weight: bold;
 `;
 
 const StyledTR = styled.div`

@@ -7,55 +7,23 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import styled from "styled-components";
 import Navbar from "../components/Navbar";
-
-const FormContainer = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 70%;
-  padding: 40px;
-  margin: auto;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-`;
-
-const Label = styled.label`
-  margin-top: 1rem;
-  font-weight: bold;
-`;
-
-const Input = styled.input`
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  width: 400px;
-`;
-
-const Button = styled.button`
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #0077cc;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const Title = styled.div`
-  width: 100%;
-  margin-top: 80px;
-  margin-bottom: 80px;
-  font-size: xx-large;
-  border-bottom: 1px solid;
-  text-align: center;
-`;
+import Modal from "../components/Modal";
+import Button from "../components/Button";
+import {
+  ButtonContainer,
+  FormContainer,
+  Input,
+  InputContainer,
+  Label,
+  Title,
+} from "../patient/CreatePatient";
 
 const CreateEncounter = () => {
   const navigate = useNavigate();
   const params = useParams();
   const hid = params.hid;
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     weight: "",
     bmi: "",
     body_temperature: "",
@@ -64,7 +32,10 @@ const CreateEncounter = () => {
     blood_pressure_diastolic: "",
     uterus_length: "",
     other_complication: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const patientName = sessionStorage.getItem("patientName");
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
@@ -97,96 +68,113 @@ const CreateEncounter = () => {
       };
 
       const response = await axios.post(
-        `http://localhost/v2/patients/${hid}/encounters`,
+        `/v2/patients/${hid}/encounters`,
         content,
         config
       );
-      alert(`Encounter created with id ${response.data.encounterId}`);
+      setIsShowModal(true);
+      setFormData(initialFormData);
     } catch (error) {}
+  };
+
+  const onModalClose = () => {
+    setIsShowModal(false);
+    navigate(`/view-encounters/${hid}`);
   };
 
   return (
     <>
       <Navbar />
+      {isShowModal && (
+        <Modal onClose={onModalClose}>অভিনন্দন! ভিজিট সম্পন্ন হয়েছে</Modal>
+      )}
       <FormContainer onSubmit={handleSubmit}>
-        <Title>Create Encounter</Title>
-        <Label htmlFor="weight">Weight:</Label>
-        <Input
-          type="text"
-          id="weight"
-          name="weight"
-          value={formData.weight}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="bmi">BMI:</Label>
-        <Input
-          type="text"
-          id="bmi"
-          name="bmi"
-          value={formData.bmi}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="body_temperature">Body Temperature:</Label>
-        <Input
-          type="text"
-          id="body_temperature"
-          name="body_temperature"
-          value={formData.body_temperature}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="pulse_rate">Pulse Rate:</Label>
-        <Input
-          type="text"
-          id="pulse_rate"
-          name="pulse_rate"
-          value={formData.pulse_rate}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="blood_pressure_systolic">
-          Blood Pressure Systolic:
-        </Label>
-        <Input
-          type="text"
-          id="blood_pressure_systolic"
-          name="blood_pressure_systolic"
-          value={formData.blood_pressure_systolic}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="blood_pressure_diastolic">
-          Blood Pressure Diastolic:
-        </Label>
-        <Input
-          type="text"
-          id="blood_pressure_diastolic"
-          name="blood_pressure_diastolic"
-          value={formData.blood_pressure_diastolic}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="uterus_length">Uterus Length:</Label>
-        <Input
-          type="text"
-          id="uterus_length"
-          name="uterus_length"
-          value={formData.uterus_length}
-          onChange={handleInputChange}
-          required
-        />
-        <Label htmlFor="other_complication">Other Complications:</Label>
-        <Input
-          type="text"
-          id="other_complication"
-          name="other_complication"
-          value={formData.other_complication}
-          onChange={handleInputChange}
-          required
-        />
-        <Button type="submit">Submit</Button>
+        <Title>
+          ভিজিটের তথ্য পূরণ করুন {patientName && `| ${patientName}`}
+        </Title>
+        <InputContainer>
+          <Label htmlFor="weight">ওজন (kg):</Label>
+          <Input
+            type="text"
+            id="weight"
+            name="weight"
+            value={formData.weight}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="bmi">বি এম আই (kg/m²):</Label>
+          <Input
+            type="text"
+            id="bmi"
+            name="bmi"
+            value={formData.bmi}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="body_temperature">তাপমাত্রা (°C):</Label>
+          <Input
+            type="text"
+            id="body_temperature"
+            name="body_temperature"
+            value={formData.body_temperature}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="pulse_rate">নাড়ির স্পন্দন:</Label>
+          <Input
+            type="text"
+            id="pulse_rate"
+            name="pulse_rate"
+            value={formData.pulse_rate}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="blood_pressure_systolic">
+            সিস্টোলিক রক্ত চাপ (mmHg):
+          </Label>
+          <Input
+            type="text"
+            id="blood_pressure_systolic"
+            name="blood_pressure_systolic"
+            value={formData.blood_pressure_systolic}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="blood_pressure_diastolic">
+            ডায়াস্টোলিক রক্ত চাপ (mmHg):
+          </Label>
+          <Input
+            type="text"
+            id="blood_pressure_diastolic"
+            name="blood_pressure_diastolic"
+            value={formData.blood_pressure_diastolic}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="uterus_length">জরায়ুর উচ্চতা(cm):</Label>
+          <Input
+            type="text"
+            id="uterus_length"
+            name="uterus_length"
+            value={formData.uterus_length}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="other_complication">অন্যান্য জটিলতা :</Label>
+          <Input
+            type="text"
+            id="other_complication"
+            name="other_complication"
+            value={formData.other_complication}
+            onChange={handleInputChange}
+            required
+          />
+          <ButtonContainer>
+            <Button version="success" type="submit">
+              জমা দিন
+            </Button>
+          </ButtonContainer>
+        </InputContainer>
       </FormContainer>
     </>
   );

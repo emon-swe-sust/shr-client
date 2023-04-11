@@ -2,26 +2,40 @@ import React from "react";
 import styled from "styled-components";
 
 const ButtonPrimary = styled.button`
-  background-color: #c9c9c9;
+  background-color: #c3d0d4;
   cursor: pointer;
   color: black;
   border: none;
   border-radius: 5px;
   padding: 12px;
   text-decoration: none;
+  font-size: large;
+  font-weight: bold;
+  &:hover {
+    background-color: #c9c9c9;
+  }
 `;
 
 const ButtonDanger = styled(ButtonPrimary)`
-  background-color: #ed5555;
+  background-color: #ee1818;
+  &:hover {
+    background-color: #ed5555;
+  }
   color: white;
 `;
 
 const ButtonSuccess = styled(ButtonPrimary)`
-  background-color: #55eda9;
+  background-color: #05e782;
+  &:hover {
+    background-color: #55eda9;
+  }
 `;
 
 const ButtonSecondary = styled(ButtonPrimary)`
-  background-color: #55b5ed;
+  background-color: #089aee;
+  &:hover {
+    background-color: #55b5ed;
+  }
   color: white;
 `;
 

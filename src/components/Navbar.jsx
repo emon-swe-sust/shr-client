@@ -38,6 +38,10 @@ const Input = styled.input`
   width: 400px;
   align-items: center;
   margin: auto;
+  background-color: #eceaea;
+  &:hover {
+    background-color: white;
+  }
 `;
 
 function Navbar() {
@@ -57,23 +61,23 @@ function Navbar() {
     <Nav>
       <LeftPart>
         <Button version={"primary"} onClick={() => navigate("/")}>
-          Create Patient
+          নতুন রোগী নিবন্ধন
         </Button>
       </LeftPart>
       <MiddlePart>
         <Input
           type="text"
-          placeholder="Patient HID"
+          placeholder="রোগীর হেলথ আইডি"
           value={hid}
           onChange={handleHIDChange}
         />
         <Button version={"success"} onClick={() => navigate(`/patient/${hid}`)}>
-          Search
+          খুজুন
         </Button>
       </MiddlePart>
       <RightPart>
         <Button onClick={onLogout} version={"danger"}>
-          Logout
+          লগ আউট
         </Button>
       </RightPart>
     </Nav>
