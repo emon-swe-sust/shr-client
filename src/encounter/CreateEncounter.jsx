@@ -41,6 +41,9 @@ const CreateEncounter = () => {
     hasBilirubin: "",
     numberOrIronTablet: "",
     numberOfCalciumTablet: "",
+    createdFrom: window.location.href.includes("cumilla")
+      ? "কুমিল্লা সদর "
+      : "গোপালগঞ্জ সদর",
   };
   const [formData, setFormData] = useState(initialFormData);
   const [isShowModal, setIsShowModal] = useState(false);
@@ -65,11 +68,11 @@ const CreateEncounter = () => {
       ...prevState,
       [key]: value,
     }));
-    console.log("clicked");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const data = JSON.stringify(formData);
     const content = {
       content: data,
@@ -84,11 +87,7 @@ const CreateEncounter = () => {
         },
       };
 
-      const response = await axios.post(
-        `/v2/patients/${hid}/encounters`,
-        content,
-        config
-      );
+      await axios.post(`/v2/patients/${hid}/encounters`, content, config);
       setIsShowModal(true);
       setFormData(initialFormData);
     } catch (error) {}
@@ -98,8 +97,6 @@ const CreateEncounter = () => {
     setIsShowModal(false);
     navigate(`/view-encounters/${hid}`);
   };
-
-  console.log("has edima", formData.hasEdima);
 
   return (
     <>

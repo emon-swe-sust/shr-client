@@ -26,6 +26,14 @@ const ModalContent = styled.div`
   margin: auto;
   align-items: center;
   width: 500px;
+  ${(props) =>
+    props.height &&
+    `
+    height: ${props.height};
+    overflow: scroll;
+    width: 60vw;
+    padding: 0;
+  `}
 `;
 
 const StyledImg = styled.img`
@@ -35,8 +43,10 @@ const StyledImg = styled.img`
 function Modal(props) {
   return (
     <ModalContainer>
-      <ModalContent>
-        <StyledImg src={process.env.PUBLIC_URL + "/checked.png"} />
+      <ModalContent height={props.height}>
+        {!props.height && (
+          <StyledImg src={process.env.PUBLIC_URL + "/checked.png"} />
+        )}
         {props.children}
         <Button onClick={() => props.onClose()} version="secondary">
           ঠিক আছে

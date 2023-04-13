@@ -10,6 +10,13 @@ const TableContainer = styled.div`
   border-radius: 10px;
   margin-top: 24px;
   background-color: white;
+
+  ${(props) =>
+    props.fullWidth &&
+    `
+    width: 100%;
+    margin: 0;
+  `}
 `;
 
 const StyledTable = styled.div`
@@ -64,29 +71,33 @@ const TitleButtons = styled.div`
 `;
 
 function Table(props) {
-  const { column, data, area, tableTitle, titleButtons } = props;
+  const { column, data, area, tableTitle, titleButtons, fullWidth, noTitle } =
+    props;
   return (
-    <TableContainer>
+    <TableContainer fullWidth={fullWidth}>
       <StyledTable>
-        <StyledThead>
-          {tableTitle && (
-            <TableTitle>
-              {tableTitle}
-              <TitleButtons>
-                {titleButtons && titleButtons.map((button) => button)}
-              </TitleButtons>
-            </TableTitle>
-          )}
-          {!tableTitle &&
-            column &&
-            column.map((col, idx) => {
-              return (
-                <StyledTD width={area[col]} key={idx}>
-                  {col}
-                </StyledTD>
-              );
-            })}
-        </StyledThead>
+        {!noTitle && (
+          <StyledThead>
+            {tableTitle && (
+              <TableTitle>
+                {tableTitle}
+                <TitleButtons>
+                  {titleButtons && titleButtons.map((button) => button)}
+                </TitleButtons>
+              </TableTitle>
+            )}
+            {!tableTitle &&
+              column &&
+              column.map((col, idx) => {
+                return (
+                  <StyledTD width={area[col]} key={idx}>
+                    {col}
+                  </StyledTD>
+                );
+              })}
+          </StyledThead>
+        )}
+
         {data &&
           data.map((row, index) => (
             <StyledTR key={index} fromPatient={props.fromPatient}>

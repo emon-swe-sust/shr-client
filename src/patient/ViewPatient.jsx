@@ -4,12 +4,14 @@ import Table from "../components/Table";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
+import { fetchPatientDetails } from "../components/utils";
 
 function ViewPatient() {
   const params = useParams();
   const navigate = useNavigate();
   const hid = params.hid;
-  const [details, setDetails] = useState();
+  const [profile, setProfile] = useState();
+  const [patientDetails, setPatientDetails] = useState();
 
   const columns = ["key", "value"];
 
@@ -18,84 +20,32 @@ function ViewPatient() {
     value: "60%",
   };
 
-  const fetchPatientDetails = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Auth-Token": sessionStorage.getItem("access_token"),
-          From: "local-facility-admin@test.com",
-          client_id: "18701",
-        },
-      };
-
-      const response = await axios.get(`/api/v1/patients/${hid}`, config);
-      setDetails(response.data);
-      sessionStorage.setItem("patientName", response.data.given_name);
-    } catch (error) {}
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Auth-Token": sessionStorage.getItem("access_token"),
+      From: "local-facility-admin@test.com",
+      client_id: "18701",
+    },
   };
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
       navigate("/login");
     }
-    fetchPatientDetails();
+    fetchPatientDetails(hid, config, setProfile, setPatientDetails);
   }, [hid]);
-
-  const data = [
-    {
-      key: "নাম",
-      value: details?.given_name || "",
-    },
-    {
-      key: "পদবি",
-      value: details?.sur_name || "",
-    },
-    {
-      key: "ফোন নম্বর",
-      value: details?.phone_number.number || "",
-    },
-    {
-      key: "জাতীয় পরিচয়পত্র নম্বর",
-      value: details?.nid || "",
-    },
-    {
-      key: "হেলথ আইডি ",
-      value: details?.hid || "",
-    },
-    {
-      key: "লিঙ্গ",
-      value:
-        details?.gender === "F"
-          ? "মহিলা"
-          : details?.gender === "M"
-          ? "পুরুষ"
-          : "অন্যান্য",
-    },
-    {
-      key: "জন্ম তারিখ",
-      value: details?.date_of_birth ? details?.date_of_birth.slice(0, 10) : "",
-    },
-    {
-      key: "ঠিকানা",
-      value: details?.present_address?.address_line || "",
-    },
-    {
-      key: "গোপনীয়তা",
-      value: details?.confidential || "",
-    },
-  ];
 
   return (
     <div>
       <Navbar />
       <Table
         column={columns}
-        data={data}
+        data={profile}
         area={columnArea}
         tableTitle={`রোগীর বিবরণ | ${
-          details?.given_name ? details.given_name : ""
-        } | ${details?.hid ? details.hid : ""}`}
+          patientDetails?.given_name ? patientDetails.given_name : ""
+        } | ${patientDetails?.hid ? patientDetails.hid : ""}`}
         titleButtons={[
           <Button onClick={() => navigate(`/create-encounter/${hid}`)}>
             ভিজিটের তথ্য দিন

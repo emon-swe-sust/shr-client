@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
 import styled from "styled-components";
+import { fetchPatientEncounters } from "../components/utils";
 
 const CreateButton = styled.div`
   display: flex;
@@ -39,96 +40,19 @@ function ViewEncounter() {
     key: "40%",
     value: "60%",
   };
-  const fetchPatientDetails = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Auth-Token": sessionStorage.getItem("access_token"),
-          From: "local-facility-admin@test.com",
-          client_id: "18701",
-        },
-      };
-
-      const response = await axios.get(
-        `/v2/patients/${hid}/encounters`,
-        config
-      );
-      const entries = [];
-      const encounterEntries = [];
-      response.data.entries.forEach((entry, idx) => {
-        entries.push(JSON.parse(entry.content));
-      });
-      entries.forEach((entry) => {
-        const data = [
-          {
-            key: "ওজন (kg)",
-            value: entry?.weight || "",
-          },
-          {
-            key: "বি এম আই (kg/m²)",
-            value: entry?.bmi || "",
-          },
-          {
-            key: "তাপমাত্রা (°C)",
-            value: entry?.body_temperature || "",
-          },
-          {
-            key: "নাড়ির স্পন্দন",
-            value: entry?.pulse_rate || "",
-          },
-          {
-            key: "জরায়ুর উচ্চতা (cm)",
-            value: entry?.uterus_length || "",
-          },
-          {
-            key: "সিস্টোলিক রক্ত চাপ (mmHg)",
-            value: entry?.blood_pressure_systolic || "",
-          },
-          {
-            key: "ডায়াস্টোলিক রক্ত চাপ (mmHg)",
-            value: entry?.blood_pressure_diastolic || "",
-          },
-          {
-            key: "ইডিমা",
-            value: entry?.hasEdima ? "আছে" : "নেই" || "",
-          },
-          {
-            key: "টিটি টিকা ডোজ সম্পূর্ণ করা",
-            value: entry?.isTTDoseCompleted ? "আছে" : "নেই" || "",
-          },
-          {
-            key: "প্রস্রাব পরীক্ষায় অ্যালবুমিন",
-            value: entry?.hasAlbumin ? "আছে" : "নেই" || "",
-          },
-          {
-            key: "প্রস্রাব পরীক্ষায় বিলিরুবিন",
-            value: entry?.hasBilirubin ? "আছে" : "নেই" || "",
-          },
-          {
-            key: "গতমাসে আয়রন বড়ির খাওয়ার সংখ্যা",
-            value: entry?.numberOrIronTablet || "",
-          },
-          {
-            key: "গতমাসে ক্যালসিয়াম বড়ির খাওয়ার সংখ্যা ",
-            value: entry?.numberOfCalciumTablet || "",
-          },
-          {
-            key: "অন্যান্য জটিলতা",
-            value: entry?.other_complication || "",
-          },
-        ];
-        encounterEntries.push(data);
-      });
-      setEncounters(encounterEntries);
-    } catch (error) {}
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Auth-Token": sessionStorage.getItem("access_token"),
+      From: "local-facility-admin@test.com",
+      client_id: "18701",
+    },
   };
-
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
       navigate("/login");
     }
-    fetchPatientDetails();
+    fetchPatientEncounters(hid, config, setEncounters);
   }, [hid]);
 
   return (
@@ -160,3 +84,5 @@ function ViewEncounter() {
 }
 
 export default ViewEncounter;
+
+// 98000100266
