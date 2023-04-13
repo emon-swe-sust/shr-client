@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { Navigate, redirect, useNavigate, useParams } from "react-router-dom";
-import logo from "./../components/Govt.png";
+import { useNavigate, useParams } from "react-router-dom";
 import { StyledImg } from "../components/Navbar";
+import logo from "./../components/Govt.png";
 
 const Container = styled.div`
   display: flex;
@@ -44,9 +44,7 @@ const Button = styled.button`
   border-radius: 5px;
 `;
 
-const Title = styled.div`
-  font-size: x-large;
-`;
+// 98000104565
 
 const Flex = styled.div`
   display: flex;
@@ -60,25 +58,21 @@ const Flex = styled.div`
   border-radius: 8px;
 `;
 
-function Login() {
+const Title = styled.div`
+  font-size: x-large;
+`;
+
+function LoginPatient() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const params = useParams();
+  const [hid, setHId] = useState("");
+  const email = "local-facility-admin@test.com";
+  const password = "password";
 
   useEffect(() => {
     if (sessionStorage.getItem("access_token")) {
-      navigate("/");
+      navigate("/patient-portal");
     }
   }, []);
-
-  const handleemailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -99,7 +93,8 @@ function Login() {
         const response = await axios.post("/signin", formData, config);
 
         sessionStorage.setItem("access_token", response.data.access_token);
-        navigate("/");
+        sessionStorage.setItem("hid", hid);
+        navigate("/patient-portal");
       } catch (error) {}
     } else {
       alert("Please fill in both email and password fields");
@@ -112,11 +107,7 @@ function Login() {
         <Flex>
           <StyledImg src={logo} alt="logo" />
           <Title>
-            প্রসূতি স্বাস্থ্য সেবা (
-            {window.location.href.includes("gopalgonj")
-              ? "গোপালগঞ্জ সদর "
-              : "কুমিল্লা সদর"}
-            )
+            প্রসূতি স্বাস্থ্য সেবা
             <br />
             গণপ্রজাতন্ত্রী বাংলাদেশ সরকার <br />
             স্বাস্থ্য ও পরিবার পরিকল্পনা মন্ত্রণালয়
@@ -125,17 +116,13 @@ function Login() {
         <Form onSubmit={handleSubmit}>
           <h1>লগইন</h1>
           <Input
-            type="email"
-            placeholder="ইমেইল"
-            value={email}
-            onChange={handleemailChange}
+            type="text"
+            placeholder="হেলথ আইডি"
+            value={hid}
+            onChange={(e) => setHId(e.target.value)}
+            required
           />
-          <Input
-            type="password"
-            placeholder="পাসওয়ার্ড"
-            value={password}
-            onChange={handlePasswordChange}
-          />
+          <Input type="password" placeholder="পাসওয়ার্ড" required />
           <Button type="submit">লগইন</Button>
         </Form>
       </Container>
@@ -143,4 +130,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPatient;

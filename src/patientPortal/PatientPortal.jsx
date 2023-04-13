@@ -1,37 +1,31 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Table from "../components/Table";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import Button from "../components/Button";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
-const CreateButton = styled.div`
-  display: flex;
+const Label = styled.div`
   margin: auto;
-  align-items: center;
-  margin-top: 24px;
-  margin-bottom: 24px;
+  text-align: center;
+  margin: 24px;
+  font-size: xx-large;
 `;
 
-const Div = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-function ViewEncounter() {
-  const params = useParams();
-  const navigate = useNavigate();
-  const hid = params.hid;
+function PatientPortal() {
+  const hid = sessionStorage.getItem("hid");
+  const [profile, setProfile] = useState();
   const [encounters, setEncounters] = useState();
-  const patientName = sessionStorage.getItem("patientName");
-
-  useEffect(() => {
-    if (!sessionStorage.getItem("access_token")) {
-      navigate("/login");
-    }
-  }, []);
+  const [patientDetails, setPatientDetails] = useState();
+  const navigate = useNavigate();
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Auth-Token": sessionStorage.getItem("access_token"),
+      From: "local-facility-admin@test.com",
+      client_id: "18701",
+    },
+  };
 
   const columns = ["key", "value"];
 
@@ -39,17 +33,64 @@ function ViewEncounter() {
     key: "40%",
     value: "60%",
   };
+
   const fetchPatientDetails = async () => {
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          "X-Auth-Token": sessionStorage.getItem("access_token"),
-          From: "local-facility-admin@test.com",
-          client_id: "18701",
+      const response = await axios.get(`/api/v1/patients/${hid}`, config);
+      const details = response.data;
+      const data = [
+        {
+          key: "নাম",
+          value: details?.given_name || "",
         },
-      };
+        {
+          key: "পদবি",
+          value: details?.sur_name || "",
+        },
+        {
+          key: "ফোন নম্বর",
+          value: details?.phone_number.number || "",
+        },
+        {
+          key: "জাতীয় পরিচয়পত্র নম্বর",
+          value: details?.nid || "",
+        },
+        {
+          key: "হেলথ আইডি ",
+          value: details?.hid || "",
+        },
+        {
+          key: "লিঙ্গ",
+          value:
+            details?.gender === "F"
+              ? "মহিলা"
+              : details?.gender === "M"
+              ? "পুরুষ"
+              : "অন্যান্য",
+        },
+        {
+          key: "জন্ম তারিখ",
+          value: details?.date_of_birth
+            ? details?.date_of_birth.slice(0, 10)
+            : "",
+        },
+        {
+          key: "ঠিকানা",
+          value: details?.present_address?.address_line || "",
+        },
+        {
+          key: "গোপনীয়তা",
+          value: details?.confidential || "",
+        },
+      ];
+      setProfile(data);
+      setPatientDetails(response.data);
+      sessionStorage.setItem("patientName", response.data.given_name);
+    } catch (error) {}
+  };
 
+  const fetchPatientEncounters = async () => {
+    try {
       const response = await axios.get(
         `/v2/patients/${hid}/encounters`,
         config
@@ -126,37 +167,42 @@ function ViewEncounter() {
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
-      navigate("/login");
+      navigate("/login-patient");
     }
     fetchPatientDetails();
-  }, [hid]);
+    fetchPatientEncounters();
+  }, []);
+
+  console.log(profile);
 
   return (
-    <Div>
-      <Navbar />
-      <CreateButton>
-        <Button
-          version="secondary"
-          onClick={() => navigate(`/create-encounter/${hid}`)}
-        >
-          নতুন ভিজিটের তথ্য দিন
-        </Button>
-      </CreateButton>
+    <div>
+      <Navbar isPatient={true} />
+      <Table
+        fromPatient={true}
+        column={columns}
+        data={profile}
+        area={columnArea}
+        tableTitle={`রোগীর বিবরণ | ${
+          patientDetails && patientDetails.given_name
+        } | ${patientDetails && patientDetails.hid}`}
+      />
+
+      <Label>ভিজিট সমূহের বিবরণ </Label>
       {encounters &&
         encounters.map((encounter, id) => {
           return (
             <Table
+              fromPatient={true}
               column={columns}
               data={encounter}
               area={columnArea}
-              tableTitle={`ভিজিট - ${id + 1} ${
-                patientName && `| ${patientName}`
-              }`}
+              tableTitle={`ভিজিট - ${id + 1}`}
             />
           );
         })}
-    </Div>
+    </div>
   );
 }
 
-export default ViewEncounter;
+export default PatientPortal;

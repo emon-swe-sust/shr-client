@@ -4,11 +4,20 @@ import CreatePatient from "./patient/CreatePatient";
 import ViewPatient from "./patient/ViewPatient";
 import CreateEncounter from "./encounter/CreateEncounter";
 import ViewEncounter from "./encounter/ViewEncounter";
+import LoginPatient from "./patientPortal/LoginPatient";
+import PatientPortal from "./patientPortal/PatientPortal";
+import "./fonts/SolaimanLipi.ttf";
+import styled from "styled-components";
+
+const Container = styled.div`
+  font-family: "SulaimanLipi";
+  font-size: 24px;
+`;
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/signin",
+      path: "/login",
       element: <Login />,
     },
     {
@@ -31,9 +40,21 @@ function App() {
       path: "/view-encounters/:hid",
       element: <ViewEncounter />,
     },
+    {
+      path: "/login-patient",
+      element: <LoginPatient />,
+    },
+    {
+      path: "/patient-portal",
+      element: <PatientPortal />,
+    },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <Container>
+      <RouterProvider router={router} />
+    </Container>
+  );
 }
 
 export default App;

@@ -1,5 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import "./../index.css";
+import {
+  RadioButtonInput,
+  RadioButtonLabel,
+  RadioButtonWrapper,
+} from "./InputFields";
 
 const ButtonPrimary = styled.button`
   background-color: #c3d0d4;
@@ -7,13 +13,14 @@ const ButtonPrimary = styled.button`
   color: black;
   border: none;
   border-radius: 5px;
-  padding: 12px;
+  padding: 12px 20px;
   text-decoration: none;
-  font-size: large;
+  font-size: x-large;
   font-weight: bold;
-  &:hover {
-    background-color: #c9c9c9;
-  }
+  ${(props) =>
+    props.backgroundColor && `background-color:${props.backgroundColor};`}
+  ${(props) => props.color && `color:${props.color};`}
+  font-family: "SulaimanLipi"
 `;
 
 const ButtonDanger = styled(ButtonPrimary)`
@@ -58,9 +65,23 @@ function Button(props) {
         {props.children}
       </ButtonSecondary>
     );
-  else
+  else if (props.version === "radio") {
+    console.log(props);
     return (
-      <ButtonPrimary onClick={props.onClick}>{props.children}</ButtonPrimary>
+      <RadioButtonWrapper onClick={props.onClick}>
+        <RadioButtonInput selected={props.selected ? true : false} />
+        <RadioButtonLabel>{props.children}</RadioButtonLabel>
+      </RadioButtonWrapper>
+    );
+  } else
+    return (
+      <ButtonPrimary
+        color={props.color}
+        backgroundColor={props.backgroundColor}
+        onClick={props.onClick}
+      >
+        {props.children}
+      </ButtonPrimary>
     );
 }
 

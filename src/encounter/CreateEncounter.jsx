@@ -11,13 +11,16 @@ import Navbar from "../components/Navbar";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
 import {
-  ButtonContainer,
   FormContainer,
   Input,
+  ButtonContainer,
   InputContainer,
   Label,
+  Radio,
   Title,
-} from "../patient/CreatePatient";
+  RadioButtonWrapper,
+  RadioButtonLabel,
+} from "../components/InputFields";
 
 const CreateEncounter = () => {
   const navigate = useNavigate();
@@ -32,6 +35,12 @@ const CreateEncounter = () => {
     blood_pressure_diastolic: "",
     uterus_length: "",
     other_complication: "",
+    hasEdima: "",
+    isTTDoseCompleted: "",
+    hasAlbumin: "",
+    hasBilirubin: "",
+    numberOrIronTablet: "",
+    numberOfCalciumTablet: "",
   };
   const [formData, setFormData] = useState(initialFormData);
   const [isShowModal, setIsShowModal] = useState(false);
@@ -39,7 +48,7 @@ const CreateEncounter = () => {
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
-      navigate("/signin");
+      navigate("/login");
     }
   }, []);
 
@@ -49,6 +58,14 @@ const CreateEncounter = () => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleRadioInputChange = (key, value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+    console.log("clicked");
   };
 
   const handleSubmit = async (event) => {
@@ -82,6 +99,8 @@ const CreateEncounter = () => {
     navigate(`/view-encounters/${hid}`);
   };
 
+  console.log("has edima", formData.hasEdima);
+
   return (
     <>
       <Navbar />
@@ -95,7 +114,7 @@ const CreateEncounter = () => {
         <InputContainer>
           <Label htmlFor="weight">ওজন (kg):</Label>
           <Input
-            type="text"
+            type="number"
             id="weight"
             name="weight"
             value={formData.weight}
@@ -104,7 +123,7 @@ const CreateEncounter = () => {
           />
           <Label htmlFor="bmi">বি এম আই (kg/m²):</Label>
           <Input
-            type="text"
+            type="number"
             id="bmi"
             name="bmi"
             value={formData.bmi}
@@ -113,7 +132,7 @@ const CreateEncounter = () => {
           />
           <Label htmlFor="body_temperature">তাপমাত্রা (°C):</Label>
           <Input
-            type="text"
+            type="number"
             id="body_temperature"
             name="body_temperature"
             value={formData.body_temperature}
@@ -122,7 +141,7 @@ const CreateEncounter = () => {
           />
           <Label htmlFor="pulse_rate">নাড়ির স্পন্দন:</Label>
           <Input
-            type="text"
+            type="number"
             id="pulse_rate"
             name="pulse_rate"
             value={formData.pulse_rate}
@@ -133,7 +152,7 @@ const CreateEncounter = () => {
             সিস্টোলিক রক্ত চাপ (mmHg):
           </Label>
           <Input
-            type="text"
+            type="number"
             id="blood_pressure_systolic"
             name="blood_pressure_systolic"
             value={formData.blood_pressure_systolic}
@@ -144,7 +163,7 @@ const CreateEncounter = () => {
             ডায়াস্টোলিক রক্ত চাপ (mmHg):
           </Label>
           <Input
-            type="text"
+            type="number"
             id="blood_pressure_diastolic"
             name="blood_pressure_diastolic"
             value={formData.blood_pressure_diastolic}
@@ -153,10 +172,108 @@ const CreateEncounter = () => {
           />
           <Label htmlFor="uterus_length">জরায়ুর উচ্চতা(cm):</Label>
           <Input
-            type="text"
+            type="number"
             id="uterus_length"
             name="uterus_length"
             value={formData.uterus_length}
+            onChange={handleInputChange}
+            required
+          />
+
+          <Label htmlFor="other_complication">ইডিমা আছে? :</Label>
+          <Button
+            version="radio"
+            value={formData.hasEdima}
+            selected={formData.hasEdima === true}
+            onClick={() => handleRadioInputChange("hasEdima", true)}
+          >
+            হ্যা
+          </Button>
+          <Button
+            version="radio"
+            value={formData.hasEdima}
+            selected={formData.hasEdima === false}
+            onClick={() => handleRadioInputChange("hasEdima", false)}
+          >
+            না
+          </Button>
+          <Label htmlFor="isTTDoseCompleted">
+            টিটি টিকা ডোজ সম্পূর্ণ করা আছে? :
+          </Label>
+          <Button
+            version="radio"
+            value={formData.isTTDoseCompleted}
+            selected={formData.isTTDoseCompleted === true}
+            onClick={() => handleRadioInputChange("isTTDoseCompleted", true)}
+          >
+            হ্যা
+          </Button>
+          <Button
+            version="radio"
+            value={formData.isTTDoseCompleted}
+            selected={formData.isTTDoseCompleted === false}
+            onClick={() => handleRadioInputChange("isTTDoseCompleted", false)}
+          >
+            না
+          </Button>
+          <Label htmlFor="hasAlbumin">
+            প্রস্রাব পরীক্ষায় অ্যালবুমিন আছে? :
+          </Label>
+          <Button
+            version="radio"
+            value={formData.hasAlbumin}
+            selected={formData.hasAlbumin === true}
+            onClick={() => handleRadioInputChange("hasAlbumin", true)}
+          >
+            হ্যা
+          </Button>
+          <Button
+            version="radio"
+            value={formData.hasAlbumin}
+            selected={formData.hasAlbumin === false}
+            onClick={() => handleRadioInputChange("hasAlbumin", false)}
+          >
+            না
+          </Button>
+
+          <Label htmlFor="hasBilirubin">
+            প্রস্রাব পরীক্ষায় বিলিরুবিন আছে? :
+          </Label>
+          <Button
+            version="radio"
+            value={formData.hasBilirubin}
+            selected={formData.hasBilirubin === true}
+            onClick={() => handleRadioInputChange("hasBilirubin", true)}
+          >
+            হ্যা
+          </Button>
+          <Button
+            version="radio"
+            value={formData.hasBilirubin}
+            selected={formData.hasBilirubin === false}
+            onClick={() => handleRadioInputChange("hasBilirubin", false)}
+          >
+            না
+          </Button>
+          <Label htmlFor="numberOrIronTablet">
+            গতমাসে কয়টি আয়রন বড়ি খেয়েছেন? :
+          </Label>
+          <Input
+            type="number"
+            id="numberOrIronTablet"
+            name="numberOrIronTablet"
+            value={formData.numberOrIronTablet}
+            onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="numberOfCalciumTablet">
+            গতমাসে কয়টি ক্যালসিয়াম বড়ি খেয়েছেন? :
+          </Label>
+          <Input
+            type="number"
+            id="numberOfCalciumTablet"
+            name="numberOfCalciumTablet"
+            value={formData.numberOfCalciumTablet}
             onChange={handleInputChange}
             required
           />

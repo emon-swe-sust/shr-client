@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -25,7 +23,14 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style>
+      body {
+        font-size: 20px;
+        font-family: Solaiman Lipi, Arial, Helvetica, sans-serif;
+      }
+    </style>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
@@ -46,11 +51,18 @@
       location.hostname.indexOf(".")
     );
 
-    let isSavar = uhc_name.toLowerCase() == "savar";
-    let uhc_display = isSavar ? "সাভার" : "সাটুরিয়া";
-    document.getElementsByTagName("body")[0].style.backgroundColor = isSavar
-      ? "#b1e5cd"
-      : "#cbeaf8";
+    let isPatientPortal = uhc_name == "patient";
+    let isSavar = uhc_name.toLowerCase() == "gopalgonj";
+    let uhc_display = isSavar ? "গোপালগঞ্জ সদর" : "কুমিল্লা সদর";
+    let color = "#cbeaf8";
+    if (isSavar) {
+      color = "#b1e5cd";
+    }
+    if (isPatientPortal) {
+      color = "#eacbf0";
+    }
+    document.getElementsByTagName("body")[0].style.backgroundColor = color;
     document.title = `${uhc_name} Upazilla Health Complex`;
   </script>
+
 </html>

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-// 98000104789
+import "./../index.css";
 
 const TableContainer = styled.div`
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
@@ -48,6 +47,13 @@ const StyledTR = styled.div`
   height: 60px;
   align-items: center;
   display: flex;
+  ${(props) =>
+    props.fromPatient &&
+    `
+    background-color: white;
+    height: 40px;
+    border-bottom: 1px solid #ddd;
+  `}
 `;
 
 const TitleButtons = styled.div`
@@ -72,6 +78,7 @@ function Table(props) {
             </TableTitle>
           )}
           {!tableTitle &&
+            column &&
             column.map((col, idx) => {
               return (
                 <StyledTD width={area[col]} key={idx}>
@@ -80,15 +87,17 @@ function Table(props) {
               );
             })}
         </StyledThead>
-        {data.map((row, index) => (
-          <StyledTR key={index}>
-            {column.map((col, index) => (
-              <StyledTD width={area[col]} key={index}>
-                {row[col]}
-              </StyledTD>
-            ))}
-          </StyledTR>
-        ))}
+        {data &&
+          data.map((row, index) => (
+            <StyledTR key={index} fromPatient={props.fromPatient}>
+              {column &&
+                column.map((col, index) => (
+                  <StyledTD width={area[col]} key={index}>
+                    {row[col]}
+                  </StyledTD>
+                ))}
+            </StyledTR>
+          ))}
       </StyledTable>
     </TableContainer>
   );

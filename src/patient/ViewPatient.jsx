@@ -37,7 +37,7 @@ function ViewPatient() {
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
-      navigate("/signin");
+      navigate("/login");
     }
     fetchPatientDetails();
   }, [hid]);
@@ -50,6 +50,10 @@ function ViewPatient() {
     {
       key: "পদবি",
       value: details?.sur_name || "",
+    },
+    {
+      key: "ফোন নম্বর",
+      value: details?.phone_number.number || "",
     },
     {
       key: "জাতীয় পরিচয়পত্র নম্বর",
@@ -91,7 +95,7 @@ function ViewPatient() {
         area={columnArea}
         tableTitle={`রোগীর বিবরণ | ${
           details?.given_name ? details.given_name : ""
-        }`}
+        } | ${details?.hid ? details.hid : ""}`}
         titleButtons={[
           <Button onClick={() => navigate(`/create-encounter/${hid}`)}>
             ভিজিটের তথ্য দিন

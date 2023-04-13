@@ -5,97 +5,22 @@ import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
+import "./../index.css";
+import {
+  ButtonContainer,
+  FormContainer,
+  Input,
+  InputContainer,
+  Label,
+  Title,
+  DateInput,
+  Select,
+  Radio,
+  Option,
+} from "../components/InputFields";
+import geoData from "./../components/geo_data.json";
 
-export const FormContainer = styled(Form)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 70%;
-  padding: 40px;
-  margin: auto;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  background-color: white;
-`;
-
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: auto;
-`;
-
-export const Label = styled.label`
-  margin-top: 1rem;
-  font-weight: bold;
-  margin-right: auto;
-  font-size: large;
-`;
-
-export const Input = styled.input`
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  width: 400px;
-  height: 28px;
-  border-radius: 5px;
-  background-color: #eceaea;
-  margin-bottom: 24px;
-  &:hover {
-    background-color: white;
-  }
-  &:focus {
-    background-color: white;
-  }
-`;
-
-export const DateInput = styled.input`
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  width: 400px;
-  text-align: center;
-  height: 24px;
-  border-radius: 5px;
-  background-color: #eceaea;
-  margin-bottom: 24px;
-  &:hover {
-    //background-color: #cbeaf8;
-    background-color: white;
-  }
-  &:focus {
-    background-color: white;
-  }
-`;
-
-export const Select = styled.select`
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  width: 400px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  text-align: center;
-  margin-bottom: 24px;
-  &:hover {
-    background-color: white;
-  }
-  &:focus {
-    background-color: white;
-  }
-`;
-
-export const Title = styled.div`
-  width: 100%;
-  margin-top: 80px;
-  margin-bottom: 80px;
-  font-size: xx-large;
-  border-bottom: 1px solid;
-  text-align: center;
-  font-weight: bold;
-`;
-
-export const ButtonContainer = styled.div`
-  margin-top: 24px;
-`;
+// 98000100241
 
 export const ModalBodyContainer = styled.div`
   display: flex;
@@ -105,7 +30,6 @@ const HIDContainer = styled.div`
   font-size: x-large;
   color: #11643d;
   align-items: center;
-  font-family: "Courier New", Courier, monospace;
   font-weight: bold;
 `;
 
@@ -123,17 +47,26 @@ const CreatePatient = () => {
       upazila_id: "",
     },
     confidential: "No",
+    phone_number: {
+      country_code: "008",
+      area_code: "02",
+      number: "",
+      extension: "0984",
+    },
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [isShowModal, setIsShowModal] = useState(false);
   const [patientId, setPatientId] = useState("");
+  const [bivag, setBivag] = useState();
+  const [zila, setZila] = useState();
+  const [upozila, setUpozila] = useState();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!sessionStorage.getItem("access_token")) {
-      navigate("/signin");
+      navigate("/login");
     }
   }, []);
 
@@ -158,9 +91,32 @@ const CreatePatient = () => {
     }));
   };
 
+  const handlePhoneNumberChange = (event) => {
+    const number = event.target.value;
+    setFormData((prevState) => ({
+      ...prevState,
+      phone_number: {
+        country_code: "008",
+        area_code: "02",
+        extension: "0984",
+        number: number,
+      },
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = JSON.stringify(formData);
+    const tempData = {
+      ...formData,
+      present_address: {
+        address_line: `${formData.present_address.address_line}, ${upozila}, ${zila}, ${bivag}`,
+        division_id: "30",
+        district_id: "26",
+        upazila_id: "02",
+      },
+    };
+
+    const data = JSON.stringify(tempData);
     try {
       const config = {
         headers: {
@@ -189,7 +145,7 @@ const CreatePatient = () => {
       {isShowModal && (
         <Modal onClose={onModalClose}>
           <ModalBodyContainer>
-            <div>অভিনন্দন! রোগী নিবন্ধিত হয়েছে। নিবন্ধন নম্বর -</div>{" "}
+            <div>অভিনন্দন! রোগী নিবন্ধিত হয়েছে। নিবন্ধন নম্বর -</div>
             <HIDContainer>{patientId}</HIDContainer>
           </ModalBodyContainer>
         </Modal>
@@ -198,7 +154,7 @@ const CreatePatient = () => {
         <Title>নতুন রোগী নিবন্ধন করুন</Title>
 
         <InputContainer>
-          <Label htmlFor="given_name">নাম :</Label>
+          <Label htmlFor="given_name">নামের প্রথম অংশ :</Label>
           <Input
             type="text"
             id="given_name"
@@ -207,13 +163,22 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="sur_name">পদবি :</Label>
+          <Label htmlFor="sur_name">নামের শেষ অংশ :</Label>
           <Input
             type="text"
             id="sur_name"
             name="sur_name"
             value={formData.sur_name}
             onChange={handleInputChange}
+            required
+          />
+          <Label htmlFor="phone_number">ফোন নম্বর :</Label>
+          <Input
+            type="text"
+            id="phone_number"
+            name="phone_number"
+            value={formData.phone_number.number}
+            onChange={handlePhoneNumberChange}
             required
           />
           <Label htmlFor="nid">জাতীয় পরিচয়পত্র নম্বর :</Label>
@@ -242,10 +207,61 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           >
-            <option value="">-- লিঙ্গ নির্বাচন করুন --</option>
-            <option value="M">পুরুষ </option>
-            <option value="F">মহিলা </option>
-            <option value="O">অন্যান্য </option>
+            <Option value="">-- লিঙ্গ নির্বাচন করুন --</Option>
+            <Option value="M">পুরুষ </Option>
+            <Option value="F">মহিলা </Option>
+            <Option value="O">অন্যান্য </Option>
+          </Select>
+          <Label>বিভাগ :</Label>
+          <Select
+            id="bivag"
+            name="bivag"
+            value={bivag}
+            onChange={(e) => setBivag(e.target.value)}
+            required
+          >
+            <Option value="">-- বিভাগ নির্বাচন করুন--</Option>
+            {geoData.map((district) => {
+              return <Option value={district.Name}>{district.Name}</Option>;
+            })}
+          </Select>
+          <Label>জেলা :</Label>
+          <Select
+            id="zilla"
+            name="zilla"
+            value={zila}
+            onChange={(e) => setZila(e.target.value)}
+            required
+          >
+            <Option value="">-- জেলা নির্বাচন করুন--</Option>
+            {bivag === "চট্টগ্রাম" ? (
+              <Option value="কুমিল্লা">কুমিল্লা </Option>
+            ) : bivag === "ঢাকা" ? (
+              <Option value="গোপালগঞ্জ">গোপালগঞ্জ </Option>
+            ) : (
+              <></>
+            )}
+          </Select>
+          <Label>উপজেলা :</Label>
+          <Select
+            id="upozilla"
+            name="upozilla"
+            value={upozila}
+            onChange={(e) => setUpozila(e.target.value)}
+            required
+          >
+            <Option value="">-- উপজেলা নির্বাচন করুন--</Option>
+            {zila === "কুমিল্লা" ? (
+              geoData[0].Districts[0].Upazillas.map((upozila) => (
+                <Option value={upozila}>{upozila}</Option>
+              ))
+            ) : zila === "গোপালগঞ্জ" ? (
+              geoData[1].Districts[0].Upazillas.map((upozila) => (
+                <Option value={upozila}>{upozila}</Option>
+              ))
+            ) : (
+              <></>
+            )}
           </Select>
           <Label htmlFor="address_line">ঠিকানা :</Label>
           <Input
