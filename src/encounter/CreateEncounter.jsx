@@ -177,14 +177,14 @@ const CreateEncounter = () => {
             required
           />
 
-          <Label htmlFor="other_complication">ইডিমা আছে? :</Label>
+          <Label htmlFor="other_complication">ইডিমা আছে?</Label>
           <Button
             version="radio"
             value={formData.hasEdima}
             selected={formData.hasEdima === true}
             onClick={() => handleRadioInputChange("hasEdima", true)}
           >
-            হ্যা
+            হ্যাঁ
           </Button>
           <Button
             version="radio"
@@ -195,7 +195,7 @@ const CreateEncounter = () => {
             না
           </Button>
           <Label htmlFor="isTTDoseCompleted">
-            টিটি টিকা ডোজ সম্পূর্ণ করা আছে? :
+            টিটি টিকা ডোজ সম্পূর্ণ করা আছে?
           </Label>
           <Button
             version="radio"
@@ -203,7 +203,7 @@ const CreateEncounter = () => {
             selected={formData.isTTDoseCompleted === true}
             onClick={() => handleRadioInputChange("isTTDoseCompleted", true)}
           >
-            হ্যা
+            হ্যাঁ
           </Button>
           <Button
             version="radio"
@@ -214,7 +214,7 @@ const CreateEncounter = () => {
             না
           </Button>
           <Label htmlFor="hasAlbumin">
-            প্রস্রাব পরীক্ষায় অ্যালবুমিন আছে? :
+            প্রস্রাব পরীক্ষায় অ্যালবুমিন আছে?
           </Label>
           <Button
             version="radio"
@@ -222,7 +222,7 @@ const CreateEncounter = () => {
             selected={formData.hasAlbumin === true}
             onClick={() => handleRadioInputChange("hasAlbumin", true)}
           >
-            হ্যা
+            হ্যাঁ
           </Button>
           <Button
             version="radio"
@@ -234,7 +234,7 @@ const CreateEncounter = () => {
           </Button>
 
           <Label htmlFor="hasBilirubin">
-            প্রস্রাব পরীক্ষায় বিলিরুবিন আছে? :
+            প্রস্রাব পরীক্ষায় বিলিরুবিন আছে?
           </Label>
           <Button
             version="radio"
@@ -242,7 +242,7 @@ const CreateEncounter = () => {
             selected={formData.hasBilirubin === true}
             onClick={() => handleRadioInputChange("hasBilirubin", true)}
           >
-            হ্যা
+            হ্যাঁ
           </Button>
           <Button
             version="radio"
@@ -253,7 +253,7 @@ const CreateEncounter = () => {
             না
           </Button>
           <Label htmlFor="numberOrIronTablet">
-            গতমাসে কয়টি আয়রন বড়ি খেয়েছেন? :
+            গতমাসে কয়টি আয়রন বড়ি খেয়েছেন?
           </Label>
           <Input
             type="number"
@@ -264,7 +264,7 @@ const CreateEncounter = () => {
             required
           />
           <Label htmlFor="numberOfCalciumTablet">
-            গতমাসে কয়টি ক্যালসিয়াম বড়ি খেয়েছেন? :
+            গতমাসে কয়টি ক্যালসিয়াম বড়ি খেয়েছেন?
           </Label>
           <Input
             type="number"
@@ -274,7 +274,7 @@ const CreateEncounter = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="other_complication">অন্যান্য জটিলতা :</Label>
+          <Label htmlFor="other_complication">অন্যান্য জটিলতা:</Label>
           <Input
             type="text"
             id="other_complication"

@@ -63,7 +63,7 @@ export const fetchPatientEncounters = async (hid, config, setEncounters) => {
           value: entry?.numberOrIronTablet || "",
         },
         {
-          key: "গতমাসে ক্যালসিয়াম বড়ির খাওয়ার সংখ্যা ",
+          key: "গতমাসে ক্যালসিয়াম বড়ির খাওয়ার সংখ্যা",
           value: entry?.numberOfCalciumTablet || "",
         },
         {
@@ -88,11 +88,11 @@ export const fetchPatientDetails = async (
     const details = response.data;
     const data = [
       {
-        key: "নাম",
+        key: "নামের প্রথম অংশ",
         value: details?.given_name || "",
       },
       {
-        key: "পদবি",
+        key: "নামের শেষ অংশ",
         value: details?.sur_name || "",
       },
       {
@@ -104,7 +104,7 @@ export const fetchPatientDetails = async (
         value: details?.nid || "",
       },
       {
-        key: "হেলথ আইডি ",
+        key: "হেলথ আইডি",
         value: details?.hid || "",
       },
       {

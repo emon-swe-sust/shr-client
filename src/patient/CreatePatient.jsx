@@ -154,7 +154,7 @@ const CreatePatient = () => {
         <Title>নতুন রোগী নিবন্ধন করুন</Title>
 
         <InputContainer>
-          <Label htmlFor="given_name">নামের প্রথম অংশ :</Label>
+          <Label htmlFor="given_name">নামের প্রথম অংশ:</Label>
           <Input
             type="text"
             id="given_name"
@@ -163,7 +163,7 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="sur_name">নামের শেষ অংশ :</Label>
+          <Label htmlFor="sur_name">নামের শেষ অংশ:</Label>
           <Input
             type="text"
             id="sur_name"
@@ -172,7 +172,7 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="phone_number">ফোন নম্বর :</Label>
+          <Label htmlFor="phone_number">ফোন নম্বর:</Label>
           <Input
             type="text"
             id="phone_number"
@@ -181,7 +181,7 @@ const CreatePatient = () => {
             onChange={handlePhoneNumberChange}
             required
           />
-          <Label htmlFor="nid">জাতীয় পরিচয়পত্র নম্বর :</Label>
+          <Label htmlFor="nid">জাতীয় পরিচয়পত্র নম্বর:</Label>
           <Input
             type="text"
             id="nid"
@@ -190,7 +190,7 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="date_of_birth">জন্ম তারিখ :</Label>
+          <Label htmlFor="date_of_birth">জন্ম তারিখ:</Label>
           <DateInput
             type="date"
             id="date_of_birth"
@@ -199,7 +199,7 @@ const CreatePatient = () => {
             onChange={handleInputChange}
             required
           />
-          <Label htmlFor="gender">লিঙ্গ :</Label>
+          <Label htmlFor="gender">লিঙ্গ:</Label>
           <Select
             id="gender"
             name="gender"
@@ -212,7 +212,7 @@ const CreatePatient = () => {
             <Option value="F">মহিলা </Option>
             <Option value="O">অন্যান্য </Option>
           </Select>
-          <Label>বিভাগ :</Label>
+          <Label>বিভাগ:</Label>
           <Select
             id="bivag"
             name="bivag"
@@ -225,7 +225,7 @@ const CreatePatient = () => {
               return <Option value={district.Name}>{district.Name}</Option>;
             })}
           </Select>
-          <Label>জেলা :</Label>
+          <Label>জেলা:</Label>
           <Select
             id="zilla"
             name="zilla"
@@ -242,7 +242,7 @@ const CreatePatient = () => {
               <></>
             )}
           </Select>
-          <Label>উপজেলা :</Label>
+          <Label>উপজেলা:</Label>
           <Select
             id="upozilla"
             name="upozilla"
@@ -263,7 +263,7 @@ const CreatePatient = () => {
               <></>
             )}
           </Select>
-          <Label htmlFor="address_line">ঠিকানা :</Label>
+          <Label htmlFor="address_line">ঠিকানা:</Label>
           <Input
             type="text"
             id="address_line"

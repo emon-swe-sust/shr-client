@@ -28,12 +28,6 @@ function ViewEncounter() {
   const [encounters, setEncounters] = useState();
   const patientName = sessionStorage.getItem("patientName");
 
-  useEffect(() => {
-    if (!sessionStorage.getItem("access_token")) {
-      navigate("/login");
-    }
-  }, []);
-
   const columns = ["key", "value"];
 
   const columnArea = {
